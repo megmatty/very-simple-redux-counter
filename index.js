@@ -7,11 +7,13 @@ import { Provider, connect } from 'react-redux'
 // React component
 class Counter extends Component {
   render() {
-    const { value, onIncreaseClick } = this.props
+    const { value, onIncreaseClick, onDecreaseClick, onResetClick } = this.props
     return (
-      <div>
+      <div >
         <span>{value}</span>
-        <button onClick={onIncreaseClick}>Increase</button>
+        <button onClick={onIncreaseClick}>▲</button>
+        <button onClick={onDecreaseClick}>▼</button>
+        <button onClick={onResetClick}>Reset</button>
       </div>
     )
   }
@@ -19,18 +21,26 @@ class Counter extends Component {
 
 Counter.propTypes = {
   value: PropTypes.number.isRequired,
-  onIncreaseClick: PropTypes.func.isRequired
+  onIncreaseClick: PropTypes.func.isRequired,
+  onDecreaseClick: PropTypes.func.isRequired,
+  onResetClick: PropTypes.func.isRequired
 }
 
 // Action
-const increaseAction = { type: 'increase' }
+const increaseAction = { type: 'INCREASE' }
+const decreaseAction = { type: 'DECREASE' }
+const resetAction = { type: 'RESET' }
 
 // Reducer
 function counter(state = { count: 0 }, action) {
   const count = state.count
   switch (action.type) {
-    case 'increase':
+    case 'INCREASE':
       return { count: count + 1 }
+    case 'DECREASE':
+      return { count: count - 1}
+    case 'RESET': 
+      return { count: 0 }
     default:
       return state
   }
@@ -49,7 +59,9 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
   return {
-    onIncreaseClick: () => dispatch(increaseAction)
+    onIncreaseClick: () => dispatch(increaseAction),
+    onDecreaseClick: () => dispatch(decreaseAction),
+    onResetClick: () => dispatch(resetAction)
   }
 }
 
